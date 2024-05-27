@@ -15,11 +15,11 @@
 
 06-05-2004
 ✅ - Global Model Creation Done 
-✅ - Added Feature if model doesn't exists, then create it.
+✅ - Added Feature if model doesn't exists, then create it. <br>
 
-⬜ - Start Working on Login Feature!!!
+⬜ - Start Working on Login Feature!!! <br>
 
-✅ - Create Hash Password 
+✅ - Create Hash Password <br>
 ✅ - Compare Sync Matching Hash to hash.
 
 
