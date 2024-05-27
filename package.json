@@ -8,7 +8,7 @@
   },
   "author": "AryanAg",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.0",

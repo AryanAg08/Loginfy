@@ -1,6 +1,6 @@
 const mongo = require("mongoose");
 
-const Login = new mongo.Schema({
+const UserModel = new mongo.Schema({
     Email: {
         type: String,
         required: true,
@@ -20,3 +20,5 @@ const Login = new mongo.Schema({
         required: true,
     }
 });
+
+module.exports = mongo.model("Usermodel", UserModel);
