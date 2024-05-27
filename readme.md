@@ -28,8 +28,8 @@ Errors:
 - Once the userModel is created push it to the default as well. ✅
 - Also Rename the template name. ✅
 - Put create model function out of the if statement in else. It doesn't works inside. ✅
-- Also the login , signup and logout function no console is working
+- Also the login , signup and logout function console is NOT working **[FIX IN NEXT UPDATE!!]**    
 - Req.body throws undefined!! when called!! ✅
 - Check for the same in Signup as well!! ✅
 - UsermOdel is thrown null somehow ?? -> Complete the template model FIRSTTTTTTTTTTTT ✅
-- The options in loginfy.use() are not coming!!
+- The options in loginfy.use() are not coming!! ✅
