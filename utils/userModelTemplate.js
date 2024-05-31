@@ -3,7 +3,7 @@ const mongo = require("mongoose");
 const UserModel = new mongo.Schema({
     Email: {
         type: String,
-        required: true,
+        required: false,
         unique: true,
     },
     Password: {
@@ -12,9 +12,14 @@ const UserModel = new mongo.Schema({
     },
     UserName: {
         type: String,
-        required: true,
+        required: false,
         unique: true,
     },
+    // phoneNo: {
+    //     type: Number,
+    //     required: false,
+    //     unique: true,
+    // },
     Salt: {
         type: String,
         required: true,
