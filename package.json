@@ -1,5 +1,5 @@
 {
-  "name": "loginfy",
+  "name": "logi",
   "version": "1.0.0",
   "description": "A basic Login functionality for expressJs server.",
   "main": "main.js",

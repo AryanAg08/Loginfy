@@ -41,7 +41,7 @@ npm install loginfy
     app.post('/login', loginfy.login);
     app.post('/logout', loginfy.logout);
     ```
-### Functions
+<!-- ### Functions
 
 - **createHashPassword**: Create a hashed password.
 
@@ -53,7 +53,7 @@ npm install loginfy
 
     ```javascript
     const isMatch = loginfy.compareHashPassword(password, hashedPassword);
-    ```
+    ``` -->
 
 ### Example
 
@@ -68,9 +68,6 @@ app.use(express.json());
 app.post('/signup', loginfy.signup);
 app.post('/login', loginfy.login);
 app.post('/logout', loginfy.logout);
-
-// Cookie checker middleware
-app.use(loginfy.cookieChecker);
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
@@ -89,19 +86,19 @@ app.listen(3000, () => {
 ✅ Global Model Creation Done.  
 ✅ Added feature to create a model if it doesn't exist.  
 
-⬜ Start Working on Login Feature.  
+✅ Start Working on Login Feature.  
 
 ✅ Create Hash Password.  
 ✅ Compare Sync Matching Hash to hash.
 
-## License
+<!-- ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details. -->
+<!-- 
 ## Contributing
 
-Contributions are welcome! Please read the [CONTRIBUTING](CONTRIBUTING.md) guidelines for more information.
+Contributions are welcome! Please read the [CONTRIBUTING](CONTRIBUTING.md) guidelines for more information. -->
 
 ## Contact
 
-For support or inquiries, please open an issue or contact us at support@loginfy.com.
+For support or inquiries, please open an issue or contact us at goyalaryan51@gmail.com.
