@@ -53,7 +53,7 @@ jobs:
           node-version: '14'
 
       - name: Install dependencies
-        run: npm installW
+        run: npm install
 
       - name: Publish to npm
         run: npm publish
