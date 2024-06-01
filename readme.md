@@ -1,35 +1,107 @@
 # Loginfy
 
- - Enable module export 
- - Make functions and required Endpoints. 
- - Create cookie checker and send request and check if its receiving properly
- - Try google auth enabler 
- - Discord Auth Enabler
- - Twitter Auth Enabler  
+Loginfy is a comprehensive authentication module that supports multiple authentication methods and provides robust user management. It is designed to integrate seamlessly with your existing Node.js application, offering features such as module export, cookie management, and social media authentication.
 
+## Features
 
-05-05-2024 
+- **Module Export**: Enable easy integration into your Node.js application.
+- **Functions and Endpoints**: Create necessary functions and endpoints for authentication.
+<!-- - **Cookie Checker**: Validate cookies and ensure proper request handling.
+- **Google Auth Enabler**: Support for Google authentication.
+- **Discord Auth Enabler**: Support for Discord authentication.
+- **Twitter Auth Enabler**: Support for Twitter authentication. -->
 
-✅ - Done with setting login options, fetching usermodels and checking for email, username, password!! 
-✅ - Checking them when initiating the use function. 
+## Setup and Usage
 
-06-05-2004
-✅ - Global Model Creation Done 
-✅ - Added Feature if model doesn't exists, then create it. <br>
+### Prerequisites
 
-⬜ - Start Working on Login Feature!!! <br>
+- Node.js installed
+- npm installed
 
-✅ - Create Hash Password <br>
-✅ - Compare Sync Matching Hash to hash.
+### Installation
 
+Install Loginfy via npm:
 
-Errors: 
+```bash
+npm install loginfy
+```
 
-- Once the userModel is created push it to the default as well. ✅
-- Also Rename the template name. ✅
-- Put create model function out of the if statement in else. It doesn't works inside. ✅
-- Also the login , signup and logout function console is NOT working **[FIX IN NEXT UPDATE!!]**    
-- Req.body throws undefined!! when called!! ✅
-- Check for the same in Signup as well!! ✅
-- UsermOdel is thrown null somehow ?? -> Complete the template model FIRSTTTTTTTTTTTT ✅
-- The options in loginfy.use() are not coming!! ✅
+### Configuration
+
+1. **Module Export**: Import and use Loginfy in your application.
+
+    ```javascript
+    const loginfy = require('loginfy');
+    ```
+
+2. **Endpoints**: Define the required endpoints for login, signup, and logout.
+
+    ```javascript
+    app.post('/signup', loginfy.signup);
+    app.post('/login', loginfy.login);
+    app.post('/logout', loginfy.logout);
+    ```
+### Functions
+
+- **createHashPassword**: Create a hashed password.
+
+    ```javascript
+    const hashedPassword = loginfy.createHashPassword(password);
+    ```
+
+- **compareHashPassword**: Compare a password with a hashed password.
+
+    ```javascript
+    const isMatch = loginfy.compareHashPassword(password, hashedPassword);
+    ```
+
+### Example
+
+```javascript
+const express = require('express');
+const loginfy = require('loginfy');
+
+const app = express();
+app.use(express.json());
+
+// Setup Loginfy
+app.post('/signup', loginfy.signup);
+app.post('/login', loginfy.login);
+app.post('/logout', loginfy.logout);
+
+// Cookie checker middleware
+app.use(loginfy.cookieChecker);
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
+```
+
+## Development Progress
+
+### 05-05-2024
+
+✅ Done with setting login options, fetching user models, and checking for email, username, and password.  
+✅ Checking them when initiating the use function.
+
+### 06-05-2024
+
+✅ Global Model Creation Done.  
+✅ Added feature to create a model if it doesn't exist.  
+
+⬜ Start Working on Login Feature.  
+
+✅ Create Hash Password.  
+✅ Compare Sync Matching Hash to hash.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please read the [CONTRIBUTING](CONTRIBUTING.md) guidelines for more information.
+
+## Contact
+
+For support or inquiries, please open an issue or contact us at support@loginfy.com.
