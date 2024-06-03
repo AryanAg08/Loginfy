@@ -1,16 +1,16 @@
 const mongo = require("mongoose");
 
 const UserModel = new mongo.Schema({
-    Email: {
+    email: {
         type: String,
         required: false,
         unique: true,
     },
-    Password: {
+    password: {
         type: String,
         required: true,
     },
-    UserName: {
+    username: {
         type: String,
         required: false,
         unique: true,
@@ -20,7 +20,7 @@ const UserModel = new mongo.Schema({
     //     required: false,
     //     unique: true,
     // },
-    Salt: {
+    salt: {
         type: String,
         required: true,
     }

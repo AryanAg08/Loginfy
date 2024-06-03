@@ -102,3 +102,44 @@ Contributions are welcome! Please read the [CONTRIBUTING](CONTRIBUTING.md) guide
 ## Contact
 
 For support or inquiries, please open an issue or contact us at goyalaryan51@gmail.com.
+
+
+
+
+
+## Things to be done: 
+
+// If user is using cookie, then make sure he is using the cookie parser with its secret. 
+// 
+```js
+const express = require('express');
+const AuthHelper = require('auth-helper');
+
+const app = express();
+app.use(express.json());
+
+const authHelper = new AuthHelper();
+
+// Set the strategy
+authHelper.setStrategy('google');
+
+// Initialize with options
+authHelper.initialize({
+    clientID: 'YOUR_GOOGLE_CLIENT_ID',  
+    clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
+    redirectURI: 'YOUR_REDIRECT_URI'
+});
+
+app.post('/signin', async (req, res) => {
+    const { token } = req.body;
+    try {
+        const payload = await authHelper.signIn(token);
+        res.json(payload);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+```
+
+there is no requirement of using express router just pick the originalurl and break it in accordance with / and pick the second argument accodingly.
