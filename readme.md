@@ -110,7 +110,7 @@ For support or inquiries, please open an issue or contact us at goyalaryan51@gma
 ## Things to be done: 
 
 // If user is using cookie, then make sure he is using the cookie parser with its secret. 
-// 
+// change the readme and make another readme for tracking internal changes!! Secret one!!
 ```js
 const express = require('express');
 const AuthHelper = require('auth-helper');
