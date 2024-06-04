@@ -5,6 +5,7 @@ Loginfy is a comprehensive authentication module that supports multiple authenti
 ## Features
 
 - **Module Export**: Enable easy integration into your Node.js application.
+
 - **Functions and Endpoints**: Create necessary functions and endpoints for authentication.
 <!-- - **Cookie Checker**: Validate cookies and ensure proper request handling.
 - **Google Auth Enabler**: Support for Google authentication.
@@ -17,6 +18,7 @@ Loginfy is a comprehensive authentication module that supports multiple authenti
 
 - Node.js installed
 - npm installed
+- Npm project initiated with Express Installed
 
 ### Installation
 
@@ -33,8 +35,25 @@ npm install loginfy
     ```javascript
     const loginfy = require('loginfy');
     ```
+2. **Options**: Basic Options to set for simplifying things. 
 
-2. **Endpoints**: Define the required endpoints for login, signup, and logout.
+```javascript
+      loginfy.setOptions(
+    {
+        loginOptions: {
+            Email: true,
+            Password: true,
+            Username: true,
+        },
+        samesite: true,
+        usermodel: require("./userModel"),
+    }
+);
+
+    loginfy.use();
+```
+
+3. **Endpoints**: Define the required endpoints for login, signup, and logout.
 
     ```javascript
     app.post('/signup', loginfy.signup);
@@ -55,16 +74,32 @@ npm install loginfy
     const isMatch = loginfy.compareHashPassword(password, hashedPassword);
     ``` -->
 
-### Example
+### Example Usage
 
 ```javascript
 const express = require('express');
+const cookieParser = require('cookie-parser'); // alternative cookie library can also be used for setting up cookie secret.
 const loginfy = require('loginfy');
 
 const app = express();
 app.use(express.json());
+app.use (cookieParser("loginfy-example"));
 
 // Setup Loginfy
+ loginfy.setOptions(
+    {
+        loginOptions: {
+            Email: true,
+            Password: true,
+            Username: true,
+        },
+        samesite: true,
+        usermodel: require("./userModel"), // can be left empty. The package itself can create the usermodel!!
+    }
+);
+loginfy.use();
+
+// Setup Loginfy enpoints
 app.post('/signup', loginfy.signup);
 app.post('/login', loginfy.login);
 app.post('/logout', loginfy.logout);
@@ -74,6 +109,31 @@ app.listen(3000, () => {
 });
 ```
 
+### SetOptions
+
+There are several options available for pre-setting your experience
+
+| Option                   | Type       | Default                           | Usage                                                                                   |
+|--------------------------|------------|-----------------------------------|-----------------------------------------------------------------------------------------|
+| `samesite`               | `Boolean`  | `false`                           | Indicates if the SameSite attribute should be set for cookies.                          |
+| `loginOptions.Email`     | `Boolean`  | `true`                            | Determines if email login is enabled.                                                   |
+| `loginOptions.Password`  | `Boolean`  | `true`                            | Determines if password login is enabled.                                                |
+| `loginOptions.UserName`  | `Boolean`  | `false`                           | Determines if username login is enabled.                                                |
+| `usermodel`              | `Array`    | `[]`                              | Stores user model data **OR** Can be left empty package itself will create the model.                                                                 |
+| `tokenExpiry`            | `Number`   | `24`                              | Sets the token expiration time in hours.                                                |
+| `cookieSigned`           | `Boolean`  | `true`                            | Indicates if the cookies should be signed.                                              |
+| `cokkieMaxAge`           | `Number`   | `1000 * 60 * 60 * 24` (`86400000`) | Sets the maximum age for cookies in milliseconds (default is one day).                  |
+
+### Note
+- If you are passing your own usermodel please ensure you have the following properties in your schema. 
+    ```js
+       - email
+       - password
+       - username // if marked as true in options
+       - salt // for storing each user's hash secret.
+    ```
+
+<!-- 
 ## Development Progress
 
 ### 05-05-2024
@@ -89,7 +149,7 @@ app.listen(3000, () => {
 ✅ Start Working on Login Feature.  
 
 ✅ Create Hash Password.  
-✅ Compare Sync Matching Hash to hash.
+✅ Compare Sync Matching Hash to hash. -->
 
 <!-- ## License
 
@@ -106,11 +166,12 @@ For support or inquiries, please open an issue or contact us at goyalaryan51@gma
 
 
 
-
+<!-- 
 ## Things to be done: 
 
 // If user is using cookie, then make sure he is using the cookie parser with its secret. 
 // change the readme and make another readme for tracking internal changes!! Secret one!!
+// Alos put a check on the login, signup side for the req.body if we are getting same things only and also they are not empty.
 ```js
 const express = require('express');
 const AuthHelper = require('auth-helper');
@@ -142,4 +203,4 @@ app.post('/signin', async (req, res) => {
 
 ```
 
-there is no requirement of using express router just pick the originalurl and break it in accordance with / and pick the second argument accodingly.
+there is no requirement of using express router just pick the originalurl and break it in accordance with / and pick the second argument accodingly. -->

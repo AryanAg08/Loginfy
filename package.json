@@ -1,5 +1,5 @@
 {
-  "name": "logi",
+  "name": "loginfy",
   "version": "1.0.0",
   "description": "A basic Login functionality for expressJs server.",
   "main": "main.js",
@@ -8,7 +8,7 @@
   },
   "author": "AryanAg",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.0",
