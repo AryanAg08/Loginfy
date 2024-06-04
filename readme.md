@@ -134,6 +134,9 @@ There are several options available for pre-setting your experience
        - salt // for storing each user's hash secret.
     ```
 
+
+### Future Updates
+-  Integration of Social media authentications (like google, github, linkedin, etc.)
 <!-- 
 ## Development Progress
 

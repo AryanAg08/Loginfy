@@ -4,7 +4,7 @@ const UserModel = new mongo.Schema({
     email: {
         type: String,
         required: false,
-        unique: true,
+        unique: false,
     },
     password: {
         type: String,
@@ -13,7 +13,7 @@ const UserModel = new mongo.Schema({
     username: {
         type: String,
         required: false,
-        unique: true,
+        unique: false,
     },
     // phoneNo: {
     //     type: Number,
