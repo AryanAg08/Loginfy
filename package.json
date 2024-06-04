@@ -4,7 +4,7 @@
   "description": "A basic Login functionality for expressJs server.",
   "main": "main.js",
   "scripts": {
-    "test": "npm install express cookie-parser && npx jest"
+    "test": "npm install express cookie-parser && npx jest --forceExit"
   },
   "author": "AryanAg",
   "license": "ISC",

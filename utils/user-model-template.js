@@ -13,7 +13,7 @@ const UserModel = new mongo.Schema({
     username: {
         type: String,
         required: false,
-        unique: true,
+        unique: false,
     },
     // phoneNo: {
     //     type: Number,
