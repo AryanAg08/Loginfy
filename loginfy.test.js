@@ -13,6 +13,7 @@ mongoose.connect(process.env.MONGO_URI, {
     // keepAlive: true,
 }).then(() => {
     console.log("connected to mongo!!");
+    // this is testing branch code!!
 });
 
 // Setup Loginfy
