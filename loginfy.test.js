@@ -3,6 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const loginfy = require('./main');
 const mongoose = require("mongoose");
+const UserModel = require("./utils/user-model-template");
 
 const app = express();
 app.use(express.json());
@@ -63,5 +64,6 @@ describe('Integration Tests', () => {
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.message).toEqual('User logged out successfully');
+    await UserModel.deleteMany({});
   });
 });
