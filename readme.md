@@ -123,6 +123,7 @@ There are several options available for pre-setting your experience
 | `tokenExpiry`            | `Number`   | `24`                              | Sets the token expiration time in hours.                                                |
 | `cookieSigned`           | `Boolean`  | `true`                            | Indicates if the cookies should be signed.                                              |
 | `cokkieMaxAge`           | `Number`   | `1000 * 60 * 60 * 24` (`86400000`) | Sets the maximum age for cookies in milliseconds (default is one day).                  |
+| `secret` | `String` | `loginfy` | A secret for binding the jwt token. |
 
 ### Note
 - If you are passing your own usermodel please ensure you have the following properties in your schema. 
