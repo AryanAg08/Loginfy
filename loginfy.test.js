@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser("loginfy-example"));
 
-mongoose.connect("mongodb+srv://goyalaryan51:q7y6Cr2axkBeGB5C@cluster0.hqkttla.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+mongoose.connect(process.env.MONGO_URI, {
     // keepAlive: true,
 }).then(() => {
     console.log("connected to mongo!!");
