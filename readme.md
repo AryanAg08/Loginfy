@@ -32,9 +32,9 @@ npm install loginfy
 
 1. **Module Export**: Import and use Loginfy in your application.
 
-    ```javascript
+```javascript
     const loginfy = require('loginfy');
-    ```
+```
 2. **Options**: Basic Options to set for simplifying things. 
 
 ```javascript
