@@ -1,9 +1,9 @@
 const request = require('supertest');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const loginfy = require('./main');
+const loginfy = require('../main');
 const mongoose = require("mongoose");
-const UserModel = require("./utils/user-model-template");
+const UserModel = require("../src/utils/user-model-template");
 
 const app = express();
 app.use(express.json());
@@ -23,7 +23,7 @@ loginfy.setOptions({
     Username: true,
   },
   samesite: true,
-  usermodel: require("./utils/user-model-template")
+  usermodel: require("../src/utils/user-model-template")
 });
 loginfy.use();
 
