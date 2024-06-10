@@ -1,4 +1,4 @@
-# Loginfy
+# Loginfy New Feature Branch
 
 Loginfy is a comprehensive authentication module that supports multiple authentication methods and provides robust user management. It is designed to integrate seamlessly with your existing Node.js application, offering features such as module export, cookie management, and social media authentication.
 
