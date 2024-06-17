@@ -16,8 +16,9 @@ class AuthStrategy {
             100: 'OK',
             200: 'Validation Error',
             300: 'JWT Error',
-            400: 'File System Error',
-            500: 'Unknown Error'
+            400: 'Options Error!!',
+            500: 'Unknown Error',
+            600: 'Logout!!'
         };
 
         this.#currentStatus = 100;  // Default status
@@ -43,6 +44,10 @@ class AuthStrategy {
         else if (this.#currentStatus === 100) {
             const msg = "Status: ok!!"
             console.log(`${this.#colors.green}${msg}\x1b[0m`);
+        }
+        else if (this.#currentStatus === 600) {
+            const msg = "Status: logout!!"
+            console.log(`${this.#colors.yellow}${msg}\x1b[0m`);
         }
     }
 
@@ -133,6 +138,7 @@ class AuthStrategy {
     async login(req,res,next) {};
     async logout(req,res) {};
     async signup(req,res,next) {};
+    async callback(req, res, next) {};
 }
 
 module.exports = AuthStrategy;

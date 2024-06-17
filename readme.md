@@ -208,3 +208,10 @@ app.post('/signin', async (req, res) => {
 ```
 
 there is no requirement of using express router just pick the originalurl and break it in accordance with / and pick the second argument accodingly. -->
+
+
+
+# New Changes: 
+- Auth startegy done!!
+- Local Auth done!! 
+- discord Auth --- Pending ---

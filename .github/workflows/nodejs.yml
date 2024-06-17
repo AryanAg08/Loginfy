@@ -3,7 +3,7 @@ name: Node.js Testing
 on:
   push:
     branches:
-      - Major-Feature
+      - main
 
 jobs:
   test:
