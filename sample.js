@@ -1,1 +1,2 @@
-fknf
+const loginfy = require("./main");
+
