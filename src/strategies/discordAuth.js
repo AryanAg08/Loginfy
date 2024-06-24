@@ -43,7 +43,7 @@ class DiscordAuth extends AuthStrategy {
                 
             }
 
-            login(req, res, next) {
+    async login(req, res, next) {
                 if (req.session.user) {
                     return res.redirect(this.options.redirectUri);
                 }
