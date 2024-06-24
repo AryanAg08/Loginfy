@@ -4,7 +4,7 @@
  * params: usermodel which is set my setopitons
  * output: returns true or false if exist or not!!
  */
-async function checkUsermodel (usermodel) {
+async function checkUserModel (usermodel) {
     if (typeof usermodel === 'function') {
         const fields = Object.keys(usermodel.schema.paths);
         
@@ -84,7 +84,7 @@ function checkUserName(parms) {
 
 
 module.exports = {
-    checkUsermodel,
+    checkUserModel,
     checkEmail,
     checkPass,
     checkUserName

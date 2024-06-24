@@ -1,15 +1,15 @@
 const request = require('supertest');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const loginfy = require('./main');
+const loginfy = require('../main');
 const mongoose = require("mongoose");
-const UserModel = require("./utils/user-model-template");
+const UserModel = require("../src/utils/user-model-template");
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser("loginfy-example"));
 
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect("mongodb+srv://goyalaryan51:q7y6Cr2axkBeGB5C@cluster0.hqkttla.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
     // keepAlive: true,
 }).then(() => {
     console.log("connected to mongo!!");
@@ -24,7 +24,7 @@ loginfy.setOptions({
     Username: true,
   },
   samesite: true,
-  usermodel: require("./utils/user-model-template")
+  usermodel: require("../src/utils/user-model-template")
 });
 loginfy.use();
 

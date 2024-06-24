@@ -1,4 +1,4 @@
-# Loginfy
+# Loginfy New Feature Branch
 
 Loginfy is a comprehensive authentication module that supports multiple authentication methods and provides robust user management. It is designed to integrate seamlessly with your existing Node.js application, offering features such as module export, cookie management, and social media authentication.
 
@@ -32,9 +32,9 @@ npm install loginfy
 
 1. **Module Export**: Import and use Loginfy in your application.
 
-    ```javascript
+```javascript
     const loginfy = require('loginfy');
-    ```
+```
 2. **Options**: Basic Options to set for simplifying things. 
 
 ```javascript
@@ -208,3 +208,10 @@ app.post('/signin', async (req, res) => {
 ```
 
 there is no requirement of using express router just pick the originalurl and break it in accordance with / and pick the second argument accodingly. -->
+
+
+
+# New Changes: 
+- Auth startegy done!!
+- Local Auth done!! 
+- discord Auth --- Pending ---
