@@ -1,8 +1,8 @@
 const AuthProviders = {
-    GOOGLE: "GOOGLE",
-    GITHUB: "GITHUB",
-    LOCAL: "LOCAL",
-    DISCORD: "DISCORD"
+    GOOGLE: 'GOOGLE',
+    GITHUB: 'GITHUB',
+    LOCAL: 'LOCAL',
+    DISCORD: 'DISCORD'
 };
 
-module.exports = AuthProviders;
+module.exports = {AuthProviders};
