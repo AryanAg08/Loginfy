@@ -38,17 +38,17 @@ class AuthStrategy {
             throw new Error('Invalid status code');
         }
         this.#currentStatus = code;
-        if (this.#currentStatus !== 100) {
-            this.#logError(code, errMsg);
-            throw new Error(`Execution halted with status code: ${code}`);
-        }
-        else if (this.#currentStatus === 100) {
-            const msg = "Status: ok!!"
-            console.log(`${this.#colors.green}${msg}\x1b[0m`);
+         if (this.#currentStatus === 100) {
+            // const msg = "Status: ok!!"
+            console.log(`${this.#colors.green}${errMsg}\x1b[0m`);
         }
         else if (this.#currentStatus === 600) {
             const msg = "Status: logout!!"
             console.log(`${this.#colors.yellow}${msg}\x1b[0m`);
+        }
+        else if (this.#currentStatus !== 100) {
+            this.#logError(code, errMsg);
+            throw new Error(`Execution halted with status code: ${code}`);
         }
     }
 
@@ -71,11 +71,11 @@ class AuthStrategy {
                 console.error(`${this.#colors.blue}${errorMessage}\x1b[0m`);
                 break;
             default:
-                console.error(errorMessage);
+                console.log(errorMessage);
                 break;
 
         }
-        throw new Error(errorMessage);
+       // throw new Error(errorMessage);
     }
     /**
      * 
@@ -88,7 +88,7 @@ class AuthStrategy {
         if (!req.body || typeof req.body !== 'object') {
             this.#setStatus(200, 'Request body is missing or invalid');
         }
-        this.#setStatus(100);
+        this.#setStatus(100, "Valid Request!!");
     }
 
     /**

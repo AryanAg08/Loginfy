@@ -19,7 +19,7 @@ class LocalAuth extends AuthStrategy {
         super();
         this.options = {
           //  password: '',
-            jwtSecret: "loginfy",
+            jwtSecret: "",
             tokenExpiry: 24,
             usermodel: [],
         }
@@ -54,24 +54,26 @@ class LocalAuth extends AuthStrategy {
    
     setOptions(options) {
         this.options = options;
-
-        if (this.options.usermodel.length === 0) {
+          console.log(options);
+        if (!(this.options.usermodel)) {
             this.#generateUserModel();
         }
     }
 
-   async login (instance) {
+    login (instance) {
     if (!(instance instanceof LocalAuth)) {
         throw new ErrorEvent("Invalid instance passed to login function");
     }
 
    return async (req, res, next) => {
+    console.log("working in login!!")
         try {
+            console.log("inside try")
             this._validateRequest(req);
 
             const { email, password } = req.body;
             const { usermodel } = this.options;
-            const user = usermodel.find(user => user.email === email);
+            const user = await usermodel.findOne({email: email});
             if (!user) {
                 // return res.status(404).json({ message: "User not found" }); 
                 this._setStatus(200, "User not found!!");
@@ -85,12 +87,14 @@ class LocalAuth extends AuthStrategy {
             try {
             const token = jwt.sign({ email }, this.options.jwtSecret, { expiresIn: this.options.tokenExpiry });
             //  res.status(200).json({ token });
-            this._setStatus(100, "ok!");
+            this._setStatus(100, "Successful Login!!");
             const data = {
                 token: token,
                 data: user
             }
-            return data;
+            req.user = user;
+            req.tokenResponse = token;
+            next();
         }
         catch (err) {
               return this._setStatus(300, err);
@@ -102,19 +106,27 @@ class LocalAuth extends AuthStrategy {
     }
    } 
 
-    async logout (instance) {
+     logout (instance) {
         if (!(instance instanceof LocalAuth)) {
             throw new error('this is not a valid instance for localAuth');
         }
 
-      return async (req, res) => {
-            res.logout();
+      return async (req, res, next) => {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                return res.status(500).json({ error: 'Logout failed' });
+            }
+            res.json({ message: 'Logged out successfully' });
             return this._setStatus(600, "Local Auth Logout!!")
+        });
+            next();
+           
         }
     
     }
 
-   async signup (instance) {
+    signup (instance) {
     if (!(instance instanceof LocalAuth)) {
         throw new ErrorEvent("Invalid instance passed to login function");
     }
@@ -141,7 +153,7 @@ class LocalAuth extends AuthStrategy {
         const hashPassword = createHash(password, salt);
         const newUser = new usermodel({
             email: userEmail,
-            password: password,
+            password: hashPassword,
             salt,
         });
 
@@ -158,7 +170,9 @@ class LocalAuth extends AuthStrategy {
             token: token,
             data: UserInfo,
         }
-        return data;
+        req.user = UserInfo;
+        req.tokenResponse = token;
+        next();
     }
     catch(err) {
         return this._setStatus(300, err);

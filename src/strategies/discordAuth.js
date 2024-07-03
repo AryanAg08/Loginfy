@@ -62,7 +62,6 @@ class DiscordAuth extends AuthStrategy {
    * 
    */
   setOptions(options) {
-    console.log("function called set options!!!!")
     this.options = options;
 
     if (!this.options.scope) {
