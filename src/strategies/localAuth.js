@@ -18,7 +18,7 @@ class LocalAuth extends AuthStrategy {
     constructor() {
         super();
         this.options = {
-            password: '',
+          //  password: '',
             jwtSecret: "loginfy",
             tokenExpiry: 24,
             usermodel: [],
@@ -60,7 +60,12 @@ class LocalAuth extends AuthStrategy {
         }
     }
 
-    async login(req, res, next) {
+   async login (instance) {
+    if (!(instance instanceof LocalAuth)) {
+        throw new ErrorEvent("Invalid instance passed to login function");
+    }
+
+   return async (req, res, next) => {
         try {
             this._validateRequest(req);
 
@@ -95,13 +100,25 @@ class LocalAuth extends AuthStrategy {
             next(err);
         }
     }
+   } 
 
-    async logout(req, res) {
-        res.logout();
-        return this._setStatus(600, "Local Auth Logout!!")
+    async logout (instance) {
+        if (!(instance instanceof LocalAuth)) {
+            throw new error('this is not a valid instance for localAuth');
+        }
+
+      return async (req, res) => {
+            res.logout();
+            return this._setStatus(600, "Local Auth Logout!!")
+        }
+    
     }
 
-    async signup(req, res, next) {
+   async signup (instance) {
+    if (!(instance instanceof LocalAuth)) {
+        throw new ErrorEvent("Invalid instance passed to login function");
+    }
+   return async (req, res, next) => {
         const { email, password } = req.body;
         const { usermodel } = this.options;
 
@@ -115,14 +132,14 @@ class LocalAuth extends AuthStrategy {
             return this._setStatus(200, "Invalid Email!!");
         }
 
-        const exisitingUser = await this.options.usermodel.findOne({ email: userEmail});
+        const exisitingUser = await usermodel.findOne({ email: userEmail});
         if (exisitingUser) {
             return this._setStatus(200, "Email already exists!!");
         }
 
         const salt = crypto.randomBytes(16).toString('hex');
         const hashPassword = createHash(password, salt);
-        const newUser = new this.options.usermodel({
+        const newUser = new usermodel({
             email: userEmail,
             password: password,
             salt,
@@ -148,6 +165,7 @@ class LocalAuth extends AuthStrategy {
     }
     }
 
+   }
 
 };
 
