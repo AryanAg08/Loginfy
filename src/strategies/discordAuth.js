@@ -160,35 +160,19 @@ class DiscordAuth extends AuthStrategy {
     }
 
     return async (req, res, next) => {
-      try {
-        const { code } = req.query;
-        var baseurl = `${req.protocol}://${req.headers.host}`;
-        const tokenResponse = await axios.post(`https://discord.com/api/oauth2/token`, querystring.stringify({
-          client_id: instance.options.clientId,
-          client_secret: instance.options.clientSecret,
-          code: code,
-          grant_type: 'authorization_code',
-          redirect_uri: `${baseurl}${this.options.redirectUrl}`
-        }), {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
+      var baseurl = `${req.protocol}://${req.headers.host}`;
+      if (req.session.user) {
+        return res.redirect(this.options.redirectUri);
+      } else {
+        const params = querystring.stringify({
+          client_id: this.options.clientId,
+          redirect_uri: `${baseurl}${this.options.redirectUri}`,
+          response_type: 'code',
+          scope: this.options.scope
         });
 
-        const { access_token } = tokenResponse.data;
 
-        const userResponse = await axios.get('https://discord.com/api/users/@me', {
-          headers: { Authorization: `Bearer ${access_token}` }
-        });
-
-        req.session.access_token = access_token;
-        req.session.user = userResponse.data;
-        req.user = userResponse.data;
-
-        next();
-      } catch (error) {
-        console.error("Error during signup:", error);
-        res.status(500).json({ error: 'Failed to process signup' });
+        res.redirect(`https://discord.com/api/oauth2/authorize?${params}`);
       }
     }
   }
