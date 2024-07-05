@@ -4,13 +4,15 @@
   "description": "A basic Login functionality for expressJs server.",
   "main": "main.js",
   "scripts": {
-    "test": "npm install express cookie-parser && npx jest --forceExit"
+    "test": "nodemon node sample.js"
   },
   "author": "AryanAg",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.2",
     "cookie-parser": "^1.4.6",
     "express": "^4.19.2",
+    "express-session": "^1.18.0",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.0",

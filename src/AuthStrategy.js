@@ -1,4 +1,9 @@
 
+/**
+ * This is the Authorization Base Class
+ * @class 
+ */
+
 class AuthStrategy {
     constructor() {
         if (new.target === AuthStrategy) {
@@ -8,7 +13,7 @@ class AuthStrategy {
         this.#colors = {
             red: "\x1b[31m",
             green: "\x1b[32m",
-            yellow: "\x1b[33m", 
+            yellow: "\x1b[33m",
             blue: "\x1b[34m"
         };
 
@@ -29,6 +34,7 @@ class AuthStrategy {
     #currentStatus;
 
     /**
+     * Gives error based on the error code!!
      * @param {number} code - Error Code!! 
      * @param {string} errMsg - Error Message!!
      */
@@ -37,17 +43,17 @@ class AuthStrategy {
             throw new Error('Invalid status code');
         }
         this.#currentStatus = code;
-        if (this.#currentStatus !== 100) {
-            this.#logError(code, errMsg);
-            throw new Error(`Execution halted with status code: ${code}`);
-        }
-        else if (this.#currentStatus === 100) {
-            const msg = "Status: ok!!"
-            console.log(`${this.#colors.green}${msg}\x1b[0m`);
+         if (this.#currentStatus === 100) {
+            // const msg = "Status: ok!!"
+            console.log(`${this.#colors.green}${errMsg}\x1b[0m`);
         }
         else if (this.#currentStatus === 600) {
             const msg = "Status: logout!!"
             console.log(`${this.#colors.yellow}${msg}\x1b[0m`);
+        }
+        else if (this.#currentStatus !== 100) {
+            this.#logError(code, errMsg);
+            throw new Error(`Execution halted with status code: ${code}`);
         }
     }
 
@@ -70,11 +76,11 @@ class AuthStrategy {
                 console.error(`${this.#colors.blue}${errorMessage}\x1b[0m`);
                 break;
             default:
-                console.error(errorMessage);
+                console.log(errorMessage);
                 break;
-                
+
         }
-        throw new Error(errorMessage);
+       // throw new Error(errorMessage);
     }
     /**
      * 
@@ -87,13 +93,13 @@ class AuthStrategy {
         if (!req.body || typeof req.body !== 'object') {
             this.#setStatus(200, 'Request body is missing or invalid');
         }
-        this.#setStatus(100);
+        this.#setStatus(100, "Valid Request!!");
     }
 
-   /**
-    * 
-    * @param {object} res - response object for the process. 
-    */
+    /**
+     * 
+     * @param {object} res - response object for the process. 
+     */
     #validateResponse(res) {
         if (!res || typeof res !== 'object') {
             this.#setStatus(200, 'Invalid response object');
@@ -128,17 +134,116 @@ class AuthStrategy {
         this.#setStatus(code, errMsg);
     }
 
-    setOptions(options) {};
-    
+     /**
+   * SetOptions: 
+   * Set Options for the OAuth Authentication. 
+   * 
+   * 
+   * **Options:**
+   * 1. `clientId` : The Client ID. 
+   * 2. `clientSecret` : The Client Secret.
+   * 3. `redirectUri` : The redirect Url for your Authentication.
+   * 4. `scope` : The scope of your Application. Deafult is *identify email*
+   * 
+   * **Note: The redirectUrl and the URL at the application redirect must match!!**
+   * 
+   * 
+   * @param {AuthOptions} options - The Options for Authentication.
+   * 
+   */
+    setOptions(options) { };
+
     /**
-     * @param {import('express').Request} req - request 
-     * @param {import('express').Response} res - response
-     * @param {import('express').NextFunction} next - Callback to pass control to the next middleware.
+     * 
+     * @param {instance} instance - Instance creted using correct Authorisation methods.
+     * @returns {InnerFunction} A Callback function for the Login.
      */
-    async login(req,res,next) {};
-    async logout(req,res) {};
-    async signup(req,res,next) {};
-    async callback(req, res, next) {};
+    async login(instance) {
+        /**
+         * @typedef {function (req, res, next)} InnerFunction
+         * @param {import('express').Request} req - request 
+         * @param {import('express').Response} res - response
+         * @param {import('express').NextFunction} next - Callback to pass control to the next middleware.
+         */
+        return async (req, res, next) => { };
+    };
+
+    /**
+     * **Logout:**
+     * Logout function for the Authorisation.
+     * 
+     * Takes in the instance and returns a callback function.
+     * 
+     * 
+     * InnerFunction params: 
+     * 1. `req` - Request.
+     * 2. `res` - Response.
+     * 
+     * @param {instance} instance - Instance created for the Authorisation. 
+     * @returns {InnerFunction} A Callback function for the logout.
+     */
+    async logout(instance) {
+        /**
+         * @typedef {function (req, res)} InnerFunction
+         * @param {import { Request } from "express";} req - Request
+         * @param {import { Response} from "express";} res - Response
+         */
+        return async (req, res) => { };
+    };
+
+    /**
+     * 
+     * **Signup:**
+     * Signup function for the Authorisation.
+     * 
+     * Takes instance as Parameter and Returns a Callback Function.
+     * 
+     * 
+     * InnerFunction Params: 
+     * 1. `req` - Request
+     * 2. `res` - Response
+     * 3. `next` - Next function
+     * @param {instance} instance - Instance created for Authorisation. 
+     * @returns {InnerFunction} A Callback function for the Signup.
+     */
+    async signup(instance) {
+        /**
+         * Callback Function for the signup
+         * @typedef {function (req, res, next)} InnerFunction
+         * @param {import { Request } from "express";} req - Request
+         * @param {import { Response } from "express";} res - Response
+         * @param {import { NextFunction } from "express";} next - Next Function if user wants to implement something.
+         */
+        return async (req, res, next) => { };
+    };
+
+    /**
+     * 
+     * **Callback:**
+     * Callback funtion for the Data Access Tokens and User Data.
+     * 
+     * Takes instance as a parameter and Returns a Callback Function.
+     * 
+     * InnerFunction Params: 
+     * 1. `req` - Request
+     * 2. `res` - Response
+     * 3. `next` - Next function
+     * 
+     * @param {instance} instance - Instancr created for Authorisation.
+     * @returns {InnerFunction} A callback function for the Signup. 
+     */
+    async callback(instance) {
+
+        /**
+         * Callback Function for the signup
+         * @typedef {function (req, res, next)} InnerFunction
+         * @param {import { Request } from "express";} req - Request
+         * @param {import { Response } from "express";} res - Response
+         * @param {import { NextFunction } from "express";} next - Next Function if user wants to implement something.
+         */
+
+        return async (req, res, next) => { }
+    };
 }
 
 module.exports = AuthStrategy;

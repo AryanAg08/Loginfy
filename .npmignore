@@ -1,5 +1,6 @@
 .gitignore
 node_modules/
-data.md
 test/
-crenditals
+crenditals/
+sample.js
+usermodel.js

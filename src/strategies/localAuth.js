@@ -18,8 +18,8 @@ class LocalAuth extends AuthStrategy {
     constructor() {
         super();
         this.options = {
-            password: '',
-            jwtSecret: "loginfy",
+          //  password: '',
+            jwtSecret: "",
             tokenExpiry: 24,
             usermodel: [],
         }
@@ -54,19 +54,26 @@ class LocalAuth extends AuthStrategy {
    
     setOptions(options) {
         this.options = options;
-
-        if (this.options.usermodel.length === 0) {
+          console.log(options);
+        if (!(this.options.usermodel)) {
             this.#generateUserModel();
         }
     }
 
-    async login(req, res, next) {
+    login (instance) {
+    if (!(instance instanceof LocalAuth)) {
+        throw new ErrorEvent("Invalid instance passed to login function");
+    }
+
+   return async (req, res, next) => {
+    console.log("working in login!!")
         try {
+            console.log("inside try")
             this._validateRequest(req);
 
             const { email, password } = req.body;
             const { usermodel } = this.options;
-            const user = usermodel.find(user => user.email === email);
+            const user = await usermodel.findOne({email: email});
             if (!user) {
                 // return res.status(404).json({ message: "User not found" }); 
                 this._setStatus(200, "User not found!!");
@@ -80,12 +87,14 @@ class LocalAuth extends AuthStrategy {
             try {
             const token = jwt.sign({ email }, this.options.jwtSecret, { expiresIn: this.options.tokenExpiry });
             //  res.status(200).json({ token });
-            this._setStatus(100, "ok!");
+            this._setStatus(100, "Successful Login!!");
             const data = {
                 token: token,
                 data: user
             }
-            return data;
+            req.user = user;
+            req.tokenResponse = token;
+            next();
         }
         catch (err) {
               return this._setStatus(300, err);
@@ -95,13 +104,33 @@ class LocalAuth extends AuthStrategy {
             next(err);
         }
     }
+   } 
 
-    async logout(req, res) {
-        res.logout();
-        return this._setStatus(600, "Local Auth Logout!!")
+     logout (instance) {
+        if (!(instance instanceof LocalAuth)) {
+            throw new error('this is not a valid instance for localAuth');
+        }
+
+      return async (req, res, next) => {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                return res.status(500).json({ error: 'Logout failed' });
+            }
+            res.json({ message: 'Logged out successfully' });
+            return this._setStatus(600, "Local Auth Logout!!")
+        });
+            next();
+           
+        }
+    
     }
 
-    async signup(req, res, next) {
+    signup (instance) {
+    if (!(instance instanceof LocalAuth)) {
+        throw new ErrorEvent("Invalid instance passed to login function");
+    }
+   return async (req, res, next) => {
         const { email, password } = req.body;
         const { usermodel } = this.options;
 
@@ -115,16 +144,16 @@ class LocalAuth extends AuthStrategy {
             return this._setStatus(200, "Invalid Email!!");
         }
 
-        const exisitingUser = await this.options.usermodel.findOne({ email: userEmail});
+        const exisitingUser = await usermodel.findOne({ email: userEmail});
         if (exisitingUser) {
             return this._setStatus(200, "Email already exists!!");
         }
 
         const salt = crypto.randomBytes(16).toString('hex');
         const hashPassword = createHash(password, salt);
-        const newUser = new this.options.usermodel({
+        const newUser = new usermodel({
             email: userEmail,
-            password: password,
+            password: hashPassword,
             salt,
         });
 
@@ -141,13 +170,16 @@ class LocalAuth extends AuthStrategy {
             token: token,
             data: UserInfo,
         }
-        return data;
+        req.user = UserInfo;
+        req.tokenResponse = token;
+        next();
     }
     catch(err) {
         return this._setStatus(300, err);
     }
     }
 
+   }
 
 };
 

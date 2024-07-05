@@ -1,1 +1,1 @@
-module.exports = require("./lib/loginfy");
+module.exports = require("./src/lognify");

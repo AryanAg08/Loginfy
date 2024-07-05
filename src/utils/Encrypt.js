@@ -5,7 +5,7 @@ function hashPassword (password, salt) {
     .digest('hex');
 }
 function comparePassword (_Userpassword, _HashPassword, salt) {
-    const Plain_to_hash_password = HashPassword(_Userpassword, salt);
+    const Plain_to_hash_password = hashPassword(_Userpassword, salt);
   return Plain_to_hash_password == _HashPassword;
 }
 
