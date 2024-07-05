@@ -15,6 +15,12 @@ const getAuthType = (authName) => {
         throw new Error(`Auth name: ${authName} not found`);
     }
 
+    /**
+     * @param {string} auth - Auth Type
+     * @returns {BaseClass} - An Instance of base class
+     * @throws {Error} - If the type is not Defined.
+     */
+
     switch (auth) {
         case AuthProviders.GOOGLE:
             return new GoogleAuth();
@@ -27,11 +33,11 @@ const getAuthType = (authName) => {
             console.log("this module is called!!");
             return new DiscordAuth();
            }
-
         default:
             throw new Error(`Auth provider ${authName} not supported`);
     }
 };
+
 
 const use = (authName) => {
     return getAuthType(authName);

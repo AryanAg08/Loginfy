@@ -1,16 +1,16 @@
 # Loginfy New Feature Branch
 
-Loginfy is a comprehensive authentication module that supports multiple authentication methods and provides robust user management. It is designed to integrate seamlessly with your existing Node.js application, offering features such as module export, cookie management, and social media authentication.
+Loginfy is a comprehensive authentication module that supports multiple authentication methods and provides robust user management. It is designed to integrate seamlessly with your existing Node.js application, offering features such as local and social OAuth authentication.
 
 ## Features
 
 - **Module Export**: Enable easy integration into your Node.js application.
 
 - **Functions and Endpoints**: Create necessary functions and endpoints for authentication.
-<!-- - **Cookie Checker**: Validate cookies and ensure proper request handling.
+- **Local Auth Enabler**: Support for Local authentication.
 - **Google Auth Enabler**: Support for Google authentication.
 - **Discord Auth Enabler**: Support for Discord authentication.
-- **Twitter Auth Enabler**: Support for Twitter authentication. -->
+- **Github Auth Enabler**: Support for Github authentication.
 
 ## Setup and Usage
 
@@ -19,6 +19,7 @@ Loginfy is a comprehensive authentication module that supports multiple authenti
 - Node.js installed
 - npm installed
 - Npm project initiated with Express Installed
+- Express Session Initiated
 
 ### Installation
 
@@ -30,104 +31,271 @@ npm install loginfy
 
 ### Configuration
 
-1. **Module Export**: Import and use Loginfy in your application.
+```js
+const loginfy = require("loginfy");
 
-```javascript
-    const loginfy = require('loginfy');
+const middlewareFunction = (req, res, next) => {
+    // Your middleware Functionality
+
+    // To get user Details 
+    const UserDetails = req.user;
+    
+    // To get access Token
+    const Token = req.tokenResponse;
+}
+
+const discordAuthName = 'Discord';
+
+const discordCreds = {
+    clientId: "your_discord_client_id",
+    clientSecret: "your_discord_client_secret",
+    redirectUri: "/discord/callback", // your_callback_url 
+    scope: "scope_you_want_to_set"
+};
+
+const discordAuth = loginfy.use(discordAuthName);
+if (discordAuth) {
+    discordAuth.setOptions(discordCreds);
+    
+    // Endpoints
+    app.get("/discord/login", discordAuth.login(discordAuth));
+    app.get("/discord/callback", discordAuth.callback(discordAuth), middlewareFunction);
+    app.get("/discord/logout", discordAuth.logout(discordAuth));
+    app.get("/discord/signup", discordAuth.signup(discordAuth));
+} else {
+    console.error(`Authentication strategy for ${discordAuthName} not found`);
+}
+
+const localAuthName = "LOCAL";
+const localAuth = loginfy.use(localAuthName);
+
+console.log(localAuth)
+
+if (localAuth) {
+    localAuth.setOptions({
+        jwtSecret: "my_secret",
+        tokenExpiry: 24, // In Hours
+    })
+
+        app.post("/local/login", localAuth.login(localAuth), midd);
+        app.post("/local/signup", localAuth.signup(localAuth), midd);
+        app.get("/local/logout", localAuth.logout(localAuth));
+        // There is no Callback function required in Local Authentication
+   
+}
+else {
+    console.error(`Authentication strategy for ${localAuthName} not found`);
+}
+
+const githubAuthName = "Github";
+const githubAuth = loginfy.use(githubAuthName);
+
+const githubCreds = {
+    clientId: "your_github_client_id",
+    clientSecret: "your_github_client_secret",
+    redirectUri: "/github/callback", // your_callback_url 
+    scope: "scope_you_want_to_set"
+}
+
+if (githubAuth) {
+    githubAuth.setOptions(githubCreds);
+
+    app.get("/github/login", githubAuth.login(githubAuth));
+    app.get("/github/callback", githubAuth.callback(githubAuth), middlewareFunction);
+    app.get("/github/logout", githubAuth.logout(githubAuth));
+    app.get("/github/signup", githubAuth.signup(githubAuth));
+} 
+else {
+    console.error(`Authentication strategy for ${githubAuthName} not found`);
+}
+
+const googleAuthName = "Google";
+const GoogleAuth = loginfy.use(googleAuthName);
+
+const googleCreds = {
+    clientId: "your_google_client_id",
+    clientSecret: "your_google_client_secret",
+    redirectUri: "/google/callback", // your_callback_url 
+    scope: "scope_you_want_to_set"
+};
+
+if (GoogleAuth) {
+    GoogleAuth.setOptions(googleCreds);
+
+    app.get("/google/login", GoogleAuth.login(GoogleAuth));
+    app.get("/google/callback", GoogleAuth.callback(GoogleAuth), middlewareFunction);
+    app.get("/google/logout", GoogleAuth.logout(GoogleAuth));
+    app.get("/google/signup", GoogleAuth.signup(GoogleAuth));
+
+} else {
+    console.error(`Authentication strategy for ${googleAuthName} not found`);
+}
+
+
+
 ```
-2. **Options**: Basic Options to set for simplifying things. 
-
-```javascript
-      loginfy.setOptions(
-    {
-        loginOptions: {
-            Email: true,
-            Password: true,
-            Username: true,
-        },
-        samesite: true,
-        usermodel: require("./userModel"),
-    }
-);
-
-    loginfy.use();
-```
-
-3. **Endpoints**: Define the required endpoints for login, signup, and logout.
-
-    ```javascript
-    app.post('/signup', loginfy.signup);
-    app.post('/login', loginfy.login);
-    app.post('/logout', loginfy.logout);
-    ```
-<!-- ### Functions
-
-- **createHashPassword**: Create a hashed password.
-
-    ```javascript
-    const hashedPassword = loginfy.createHashPassword(password);
-    ```
-
-- **compareHashPassword**: Compare a password with a hashed password.
-
-    ```javascript
-    const isMatch = loginfy.compareHashPassword(password, hashedPassword);
-    ``` -->
 
 ### Example Usage
 
 ```javascript
-const express = require('express');
-const cookieParser = require('cookie-parser'); // alternative cookie library can also be used for setting up cookie secret.
-const loginfy = require('loginfy');
-
+const express = require("express");
+const loginfy = require("./main");
+const session = require("express-session")
 const app = express();
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb+srv://elmo-Robot:8104085546Ag@cluster0.y7884.mongodb.net/myFirstDatabase?retryWrites=true&w=majority").then(() => console.log("Connected to database")).catch((err) => console.log(err));
+
 app.use(express.json());
-app.use (cookieParser("loginfy-example"));
 
-// Setup Loginfy
- loginfy.setOptions(
-    {
-        loginOptions: {
-            Email: true,
-            Password: true,
-            Username: true,
-        },
-        samesite: true,
-        usermodel: require("./userModel"), // can be left empty. The package itself can create the usermodel!!
-    }
-);
-loginfy.use();
+app.use(session({
+    secret: 'your-secret-key',
+    saveUninitialized: true,
+    resave: true,
+    cookie: { secure: false }
+}));
 
-// Setup Loginfy enpoints
-app.post('/signup', loginfy.signup);
-app.post('/login', loginfy.login);
-app.post('/logout', loginfy.logout);
+const middlewareFunction = (req, res, next) => {
+    console.log(req.user);
+    console.log(req.tokenResponse);
+}
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+const discordAuthName = 'Discord';
+
+const discordCreds = {
+    clientId: "your_discord_client_id",
+    clientSecret: "your_discord_client_secret",
+    redirectUri: "/discord/callback", // your_callback_url 
+    scope: "scope_you_want_to_set"
+};
+
+const discordAuth = loginfy.use(discordAuthName);
+if (discordAuth) {
+    discordAuth.setOptions(discordCreds);
+    
+    // Endpoints
+    app.get("/discord/login", discordAuth.login(discordAuth));
+    app.get("/discord/callback", discordAuth.callback(discordAuth), middlewareFunction);
+    app.get("/discord/logout", discordAuth.logout(discordAuth));
+    app.get("/discord/signup", discordAuth.signup(discordAuth));
+} else {
+    console.error(`Authentication strategy for ${discordAuthName} not found`);
+}
+
+const localAuthName = "LOCAL";
+const localAuth = loginfy.use(localAuthName);
+
+console.log(localAuth)
+
+if (localAuth) {
+    localAuth.setOptions({
+        jwtSecret: "my_secret",
+        tokenExpiry: 24, // In Hours
+    })
+
+        app.post("/local/login", localAuth.login(localAuth), midd);
+        app.post("/local/signup", localAuth.signup(localAuth), midd);
+        app.get("/local/logout", localAuth.logout(localAuth));
+        // There is no Callback function required in Local Authentication
+   
+}
+else {
+    console.error(`Authentication strategy for ${localAuthName} not found`);
+}
+
+const githubAuthName = "Github";
+const githubAuth = loginfy.use(githubAuthName);
+
+const githubCreds = {
+    clientId: "your_github_client_id",
+    clientSecret: "your_github_client_secret",
+    redirectUri: "/github/callback", // your_callback_url 
+    scope: "scope_you_want_to_set"
+}
+
+if (githubAuth) {
+    githubAuth.setOptions(githubCreds);
+
+    app.get("/github/login", githubAuth.login(githubAuth));
+    app.get("/github/callback", githubAuth.callback(githubAuth), middlewareFunction);
+    app.get("/github/logout", githubAuth.logout(githubAuth));
+    app.get("/github/signup", githubAuth.signup(githubAuth));
+} 
+else {
+    console.error(`Authentication strategy for ${githubAuthName} not found`);
+}
+
+const googleAuthName = "Google";
+const GoogleAuth = loginfy.use(googleAuthName);
+
+const googleCreds = {
+    clientId: "your_google_client_id",
+    clientSecret: "your_google_client_secret",
+    redirectUri: "/google/callback", // your_callback_url 
+    scope: "scope_you_want_to_set"
+};
+
+if (GoogleAuth) {
+    GoogleAuth.setOptions(googleCreds);
+
+    app.get("/google/login", GoogleAuth.login(GoogleAuth));
+    app.get("/google/callback", GoogleAuth.callback(GoogleAuth), middlewareFunction);
+    app.get("/google/logout", GoogleAuth.logout(GoogleAuth));
+    app.get("/google/signup", GoogleAuth.signup(GoogleAuth));
+
+} else {
+    console.error(`Authentication strategy for ${googleAuthName} not found`);
+}
+
+app.listen(4000, () => {
+    console.log("Server started on port 4000");
 });
 ```
 
 ### SetOptions
 
-There are several options available for pre-setting your experience
+There are several options available for setting up your experience
+
+1. Local Authentication:
 
 | Option                   | Type       | Default                           | Usage                                                                                   |
 |--------------------------|------------|-----------------------------------|-----------------------------------------------------------------------------------------|
-| `samesite`               | `Boolean`  | `false`                           | Indicates if the SameSite attribute should be set for cookies.                          |
-| `loginOptions.Email`     | `Boolean`  | `true`                            | Determines if email login is enabled.                                                   |
-| `loginOptions.Password`  | `Boolean`  | `true`                            | Determines if password login is enabled.                                                |
-| `loginOptions.UserName`  | `Boolean`  | `false`                           | Determines if username login is enabled.                                                |
 | `usermodel`              | `Array`    | `[]`                              | Stores user model data **OR** Can be left empty package itself will create the model.                                                                 |
 | `tokenExpiry`            | `Number`   | `24`                              | Sets the token expiration time in hours.                                                |
-| `cookieSigned`           | `Boolean`  | `true`                            | Indicates if the cookies should be signed.                                              |
-| `cokkieMaxAge`           | `Number`   | `1000 * 60 * 60 * 24` (`86400000`) | Sets the maximum age for cookies in milliseconds (default is one day).                  |
-| `secret`                 | `String`   | `loginfy` | A secret for binding the jwt token.                                                   |
+| `jwtSecret`                 | `String`   |  | A secret for binding the jwt token.                                                   |
+
+2. Discord Authentication: 
+
+| Option                   | Type       | Default                           | Usage                                                                                   |
+|--------------------------|------------|-----------------------------------|-----------------------------------------------------------------------------------------|
+| `clientId`              | `String`    |                               | Your discord Client Id for Redirecting to OAuth page                                                                 |
+| `clientSecret`            | `Number`   |                              | Your discord Client Secret for Redirecting to OAuth page                                                |
+| `redirectUri`                 | `String`   |  | Redirect Url on which user's Info will be forwarded. (It should be same as the Redirect URL on The OAuth Application.)  |
+| `scope`                 | `String`   | `identify` `email` | Scope of Your Discord OAuth Application.  |
+
+3. Github Authentication: 
+
+| Option                   | Type       | Default                           | Usage                                                                                   |
+|--------------------------|------------|-----------------------------------|-----------------------------------------------------------------------------------------|
+| `clientId`              | `String`    |                               | Your github Client Id for Redirecting to OAuth page                                                                 |
+| `clientSecret`            | `Number`   |                              | Your github Client Secret for Redirecting to OAuth page                                                |
+| `redirectUri`                 | `String`   |  | Redirect Url on which user's Info will be forwarded. (It should be same as the Redirect URL on The OAuth Application.)  |
+| `scope`                 | `String`   | `user` | Scope of Your Github OAuth Application.  |
+
+4. Google Authentication: 
+
+| Option                   | Type       | Default                           | Usage                                                                                   |
+|--------------------------|------------|-----------------------------------|-----------------------------------------------------------------------------------------|
+| `clientId`              | `String`    |                               | Your google Client Id for Redirecting to OAuth page                                                                 |
+| `clientSecret`            | `Number`   |                              | Your google Client Secret for Redirecting to OAuth page                                                |
+| `redirectUri`                 | `String`   |  | Redirect Url on which user's Info will be forwarded. (It should be same as the Redirect URL on The OAuth Application.)  |
+| `scope`                 | `String`   | `profile` `email` | Scope of Your google OAuth Application.  |
+
+<br>
 
 ### Note
 - If you are passing your own usermodel please ensure you have the following properties in your schema. 
-    ```js
+    ```bash
        - email
        - password
        - username // if marked as true in options
@@ -136,28 +304,10 @@ There are several options available for pre-setting your experience
 
 
 ### Future Updates
--  Integration of Social media authentications (like google, github, linkedin, etc.)
-<!-- 
-## Development Progress
+-  Integration of Social OAuth authentications (like X, Microsoft, linkedin, etc.)
+-  More Feasible to users with more functionality.
+-  Token storage Methods with Secured Endpoints.
 
-### 05-05-2024
-
-✅ Done with setting login options, fetching user models, and checking for email, username, and password.  
-✅ Checking them when initiating the use function.
-
-### 06-05-2024
-
-✅ Global Model Creation Done.  
-✅ Added feature to create a model if it doesn't exist.  
-
-✅ Start Working on Login Feature.  
-
-✅ Create Hash Password.  
-✅ Compare Sync Matching Hash to hash. -->
-
-<!-- ## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details. -->
 <!-- 
 ## Contributing
 
@@ -167,51 +317,3 @@ Contributions are welcome! Please read the [CONTRIBUTING](CONTRIBUTING.md) guide
 
 For support or inquiries, please open an issue or contact us at goyalaryan51@gmail.com.
 
-
-
-
-<!-- 
-## Things to be done: 
-
-// If user is using cookie, then make sure he is using the cookie parser with its secret. 
-// change the readme and make another readme for tracking internal changes!! Secret one!!
-// Alos put a check on the login, signup side for the req.body if we are getting same things only and also they are not empty.
-```js
-const express = require('express');
-const AuthHelper = require('auth-helper');
-
-const app = express();
-app.use(express.json());
-
-const authHelper = new AuthHelper();
-
-// Set the strategy
-authHelper.setStrategy('google');
-
-// Initialize with options
-authHelper.initialize({
-    clientID: 'YOUR_GOOGLE_CLIENT_ID',  
-    clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
-    redirectURI: 'YOUR_REDIRECT_URI'
-});
-
-app.post('/signin', async (req, res) => {
-    const { token } = req.body;
-    try {
-        const payload = await authHelper.signIn(token);
-        res.json(payload);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
-
-```
-
-there is no requirement of using express router just pick the originalurl and break it in accordance with / and pick the second argument accodingly. -->
-
-
-
-# New Changes: 
-- Auth startegy done!!
-- Local Auth done!! 
-- discord Auth --- Pending ---

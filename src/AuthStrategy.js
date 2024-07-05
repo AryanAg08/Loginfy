@@ -1,4 +1,9 @@
 
+/**
+ * This is the Authorization Base Class
+ * @class 
+ */
+
 class AuthStrategy {
     constructor() {
         if (new.target === AuthStrategy) {
@@ -129,6 +134,23 @@ class AuthStrategy {
         this.#setStatus(code, errMsg);
     }
 
+     /**
+   * SetOptions: 
+   * Set Options for the OAuth Authentication. 
+   * 
+   * 
+   * **Options:**
+   * 1. `clientId` : The Client ID. 
+   * 2. `clientSecret` : The Client Secret.
+   * 3. `redirectUri` : The redirect Url for your Authentication.
+   * 4. `scope` : The scope of your Application. Deafult is *identify email*
+   * 
+   * **Note: The redirectUrl and the URL at the application redirect must match!!**
+   * 
+   * 
+   * @param {AuthOptions} options - The Options for Authentication.
+   * 
+   */
     setOptions(options) { };
 
     /**

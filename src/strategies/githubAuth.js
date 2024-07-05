@@ -5,14 +5,15 @@ const AuthStrategy = require("../AuthStrategy");
 // Work on the GithubAuth
 
 /**
- * Class for Discord Authentication
- * @extends AuthStrategy
+ * Class for Github Authentication
+ * @class
+ * @augments AuthStrategy
  */
 
 /**
 * @typedef {object} AuthOptions
-* @property {string} clientId - The client ID for the Discord OAuth.
-* @property {string} clientSecret - The client Secret for the Discord OAuth.
+* @property {string} clientId - The client ID for the Github OAuth.
+* @property {string} clientSecret - The client Secret for the Github OAuth.
 * @property {string} redirectUri - The Redirect URL for the OAuth callback.
 * @property {string} scope - The scope of OAuth permissions.
  */
@@ -30,7 +31,7 @@ class GithubAuth extends AuthStrategy {
 
 
     /**
-     * @type {AuthOptions}
+     * @type {AuthOptions} 
      */
     this.options = {
       clientId: "",
@@ -41,28 +42,8 @@ class GithubAuth extends AuthStrategy {
   }
 
   /**
-   * SetOptions: 
-   * Set Options for the Discord Authentication. 
-   * 
-   * For getting the Discord Credentials check out https://discord.com/developers/docs/topics/oauth2
-   * 
-   * 
-   * **Options:**
-   * 1. `clientId` : The discord Client ID. 
-   * 2. `clientSecret` : The discord Client Secret.
-   * 3. `redirectUri` : The redirect Url for your Authentication.
-   * 4. `scope` : The scope of your Application. Deafult is *identify email*
-   * 
-   * **Note: The redirectUrl and the URL at the discord application must match!!**
-   * 
-   * 
-   * @param {AuthOptions} options - The Options for Authentication.
-   * @param {string} options.clientId - The client ID for the Discord OAuth.
-   * @param {string} options.clientSecret - The client Secret for the Discord OAuth.
-   * @param {string} options.redirectUri - The Redirect URL for the OAuth callback.
-   * @param {string} [options.scope] - Optional. The scope of the authentication request.
-   * 
-   */
+   * @inheritdoc
+  */
   setOptions(options) {
     this.options = options;
 

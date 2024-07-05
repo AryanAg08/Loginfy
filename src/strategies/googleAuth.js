@@ -6,7 +6,8 @@ const AuthStrategy = require("../AuthStrategy");
 
 /**
  * Class for Google Authentication
- * @extends AuthStrategy
+ * @class
+ * @augments AuthStrategy
  */
 
 /**
@@ -40,28 +41,10 @@ class GoogleAuth extends AuthStrategy {
     };
   }
 
+
   /**
-   * SetOptions: 
-   * Set Options for the Google Authentication. 
    * 
-   * For getting the Google Credentials check out https://Google.com/developers/docs/topics/oauth2
-   * 
-   * 
-   * **Options:**
-   * 1. `clientId` : The Google Client ID. 
-   * 2. `clientSecret` : The Google Client Secret.
-   * 3. `redirectUri` : The redirect Url for your Authentication.
-   * 4. `scope` : The scope of your Application. Deafult is *identify email*
-   * 
-   * **Note: The redirectUrl and the URL at the Google application must match!!**
-   * 
-   * 
-   * @param {AuthOptions} options - The Options for Authentication.
-   * @param {string} options.clientId - The client ID for the Google OAuth.
-   * @param {string} options.clientSecret - The client Secret for the Google OAuth.
-   * @param {string} options.redirectUri - The Redirect URL for the OAuth callback.
-   * @param {string} [options.scope] - Optional. The scope of the authentication request.
-   * 
+   * @inheritdoc 
    */
   setOptions(options) {
     this.options = options;
