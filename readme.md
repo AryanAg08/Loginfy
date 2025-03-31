@@ -144,7 +144,7 @@ const session = require("express-session")
 const app = express();
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb+srv://elmo-Robot:8104085546Ag@cluster0.y7884.mongodb.net/myFirstDatabase?retryWrites=true&w=majority").then(() => console.log("Connected to database")).catch((err) => console.log(err));
+mongoose.connect("MONGO::LINK").then(() => console.log("Connected to database")).catch((err) => console.log(err));
 
 app.use(express.json());
 
